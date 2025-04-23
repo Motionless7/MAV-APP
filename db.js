@@ -30,10 +30,8 @@ async function execute(sql, binds = [], options = {}) {
     options.timeout = 5000;
     try {
         conn = await oracledb.getConnection();
-        console.log('Connection good', sql, binds);
         const result = await conn.execute(sql, binds, options);
         await conn.commit();
-        console.log('Result good', result);
         return result;
     } catch (err) {
         console.error('execute() error: ', err);

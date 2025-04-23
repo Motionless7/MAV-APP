@@ -11,19 +11,18 @@ router.post('/register', async (req, res) => {
     if (!nev || !email || !jelszo) {
         return res.status(400).json({ error: 'Minden mezőt ki kell tölteni!' });
     }
-    console.log(nev, email, jelszo, szerep);
+
 
     try {
         const hashedPassword = await bcrypt.hash(jelszo, 10);
-        console.log("Hash kész:", hashedPassword);
+
 
         const sql = `
             INSERT INTO FELHASZNALO (id, nev, email, jelszo, szerep)
             VALUES (felhasznalo_seq.NEXTVAL, :nev, :email, :jelszo, :szerep)
         `;
 
-        const result = await db.execute(sql, {nev, email, jelszo: hashedPassword, szerep});
-        console.log("Adatbázisba írás eredménye:", result);
+        await db.execute(sql, {nev, email, jelszo: hashedPassword, szerep});
 
         res.redirect('/login');
     } catch (err) {
