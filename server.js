@@ -5,16 +5,19 @@ const PORT = 3000;
 const DB = require("./db.js");
 const bcrypt = require("bcryptjs");
 const registerRoute = require("./src/js/register");
+const loginRoute = require('./src/js/login');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
-app.use("/", registerRoute);
+app.use('/', registerRoute);
+app.use('/', loginRoute);
 
 // Serve pages
 app.get("/", (req, res) => res.sendFile(path.join(__dirname, "src/view/index.html")));
 app.get("/login", (req, res) => res.sendFile(path.join(__dirname, "src/view/login.html")));
 app.get("/register", (req, res) => res.sendFile(path.join(__dirname, "src/view/register.html")));
+
 
 // Start server
 app.listen(PORT, () => {
