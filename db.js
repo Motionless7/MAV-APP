@@ -1,9 +1,9 @@
 const oracledb = require('oracledb');
 
 const dbConfig = {
-    user: 'C##QYO2PE',
-    password: 'Slavsquat777',
-    connectString: 'linux.inf.u-szeged.hu:22/orania2' // or whatever service name your DB uses
+    user: 'SYSTEM',
+    password: 'user',
+    connectString: 'localhost:1521'
 };
 
 async function initialize() {
@@ -27,12 +27,17 @@ async function close() {
 async function execute(sql, binds = [], options = {}) {
     let conn;
     options.outFormat = oracledb.OUT_FORMAT_OBJECT;
+    options.timeout = 5000;
     try {
         conn = await oracledb.getConnection();
+        console.log('Connection good', sql, binds);
         const result = await conn.execute(sql, binds, options);
+        await conn.commit();
+        console.log('Result good', result);
         return result;
     } catch (err) {
         console.error('execute() error: ', err);
+        throw err; // Dobd újra, hogy a hívó oldal is tudja kezelni
     } finally {
         if (conn) await conn.close();
     }

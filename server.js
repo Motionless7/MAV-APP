@@ -4,10 +4,12 @@ const app = express();
 const PORT = 3000;
 const DB = require("./db.js");
 const bcrypt = require("bcryptjs");
+const registerRoute = require("./src/js/register");
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public"))); // For CSS/JS if any
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
+app.use("/", registerRoute);
 
 // Serve pages
 app.get("/", (req, res) => res.sendFile(path.join(__dirname, "src/view/index.html")));
